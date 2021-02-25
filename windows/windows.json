@@ -3,37 +3,39 @@
     "builders": [{
         "type": "qemu",
         "iso_url": "iso/win2016.iso",
-        "iso_checksum_type": "none",
+        "iso_checksum": "none",
+        "headless": true,
         "communicator": "none",
         "accelerator" : "kvm",
-     "floppy_files": ["./http/Autounattend.xml",
-        "./http/logon.ps1",
-        "./http/rh.cer"], 
-        "floppy_label" : "flop",
-        "boot_command": [
-            "<enter><wait><f6><wait><esc><wait>",
-            "<enter>"
-        ],
-    "format": "raw",
-    "disk_interface" : "ide",
+        "floppy_files": ["./http/Autounattend.xml",
+            "./http/logon.ps1",
+            "./http/rh.cer"], 
+            "floppy_label" : "flop",
+            "boot_command": [
+                "<enter><wait><f6><wait><esc><wait>",
+                "<enter>"
+            ],
+            "format": "raw",
+            "disk_interface" : "ide",
+            "boot_wait": "2s",
+            "disk_size": "15G",
+            "memory": 10240,
+            "net_device": "e1000",
+            "machine_type" : "q35",
+            "vnc_bind_address" : "0.0.0.0",
+            "http_directory": "http",
+            "qemuargs": [
+                ["-serial", "stdio"],
+                ["-cpu", "host"],
+                ["-boot", "once=d"],
+                ["-display", "none"],
+                ["-bios", "/usr/share/OVMF/OVMF_CODE.fd"]
+            ],
+            "shutdown_timeout": "45m"
 
-        "boot_wait": "2s",
-        "disk_size": "15G",
-        "headless": false,
-        "memory": 30000,
-        "net_device": "e1000",
-        "machine_type" : "q35",
-        "vnc_bind_address" : "0.0.0.0",
-        "http_directory": "http",
-        "qemuargs": [
-            ["-serial", "stdio"],
-            ["-bios", "/usr/share/edk2-ovmf/x64/OVMF_CODE.fd"]
-        ],
-                    "shutdown_timeout": "45m"
+    }],
 
-}],
-
-        "post-processors": [
+    "post-processors": [
         {
             "type": "shell-local",
             "inline_shebang": "/bin/bash -e",
